@@ -1,5 +1,6 @@
 package com.github.ramonwirsch.fopRenderer
 
+import spock.lang.IgnoreIf
 import spock.lang.Issue
 import spock.lang.PendingFeature
 import spock.lang.Specification
@@ -82,18 +83,14 @@ class XSLTTransformationSpec extends Specification {
 		and: "a bad stylesheet"
 		def stylesheet = fsFixture.resolve('xml/not-well-formed.xml').toFile()
 		
-		and: "an instance without parameters"
-		def instance = new XSLTTransformation(stylesheet, [:])
-
 		when: "transformation is invoked"
-		instance.transform(src, transformed)
+		new XSLTTransformation(stylesheet, [:]).transform(src, transformed)
 
 		then: "the transformation fails"
 		Exception e = thrown()
 		!transformed.exists()
 	}
 	
-	@PendingFeature
 	@Issue("https://github.com/ramonwirsch/fopRenderer/issues/14")
 	def "supports xslt 2 stylesheets"() {
 		given: "a well-formed source"
