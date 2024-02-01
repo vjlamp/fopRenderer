@@ -41,7 +41,7 @@ dependencies {
 	implementation("org.apache.avalon.framework:avalon-framework-impl:4.3.1")
 	implementation("org.apache.xmlgraphics:fop:2.6")
 	implementation("net.sf.offo:fop-hyph:2.0")
-	implementation("xalan:xalan:2.7.2")
+	implementation("net.sf.saxon:Saxon-HE:11.4")
 
 	testImplementation(platform("org.spockframework:spock-bom:2.3-groovy-3.0"))
 	testImplementation("org.spockframework:spock-core")
