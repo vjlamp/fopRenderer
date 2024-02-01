@@ -39,7 +39,7 @@ gradlePlugin {
 
 dependencies {
 	implementation("org.apache.avalon.framework:avalon-framework-impl:4.3.1")
-	implementation("org.apache.xmlgraphics:fop:2.6")
+	implementation("org.apache.xmlgraphics:fop:2.9")
 	implementation("net.sf.offo:fop-hyph:2.0")
 	implementation("net.sf.saxon:Saxon-HE:11.4")
 
