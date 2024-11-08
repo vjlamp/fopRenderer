@@ -50,6 +50,7 @@ open class FopRenderTask @Inject constructor(
                 inputFile.set(this@FopRenderTask.inputFile)
                 outputFile.set(this@FopRenderTask.outputFile)
                 this.resourceBaseDir.set(resourceBaseDir)
+                configFile.set(this@FopRenderTask.configFile)
             }
         } catch (e: MalformedURLException) {
             logger.error("ResourceBaseDir is incorrectly configured!", e)
@@ -60,6 +61,7 @@ open class FopRenderTask @Inject constructor(
         val inputFile: RegularFileProperty
         val outputFile: RegularFileProperty
         val resourceBaseDir: RegularFileProperty
+        val configFile: RegularFileProperty
     }
 
     abstract class RenderWorker : WorkAction<RenderParameters> {
@@ -68,14 +70,22 @@ open class FopRenderTask @Inject constructor(
 
         override fun execute() {
             val params = parameters
+            logger.info("VVV")
+            logger.info("params: " + params.configFile)
             val inputFile = params.inputFile.asFile.get()
             val outputFile = params.outputFile.asFile.get()
             val resourceBaseDir = params.resourceBaseDir.asFile.get()
-
+            val configFile: File = params.configFile.asFile.get()
+            
             var outstream: OutputStream? = null
             try {
                 val input = InputHandler(inputFile)
-                val userAgent: FOUserAgent = FopFactory.newInstance(resourceBaseDir.toURI()).newFOUserAgent()
+                logger.info("fopCfgFile: " + configFile)
+                val fopFactory = if (configFile.exists())
+                    FopFactory.newInstance(configFile)
+                    else
+                    FopFactory.newInstance(resourceBaseDir.toURI())
+                val userAgent: FOUserAgent = fopFactory.newFOUserAgent()
                 outstream = BufferedOutputStream(FileOutputStream(outputFile))
                 input.renderTo(userAgent, MimeConstants.MIME_PDF, outstream)
                 logger.info("Successfully rendered {}", outputFile)
@@ -119,4 +129,7 @@ open class FopRenderTask @Inject constructor(
         set(input) {
             inputFileProperty.set(input)
         }
+        
+    private val configFile: File
+        get() = renderConfig!!.fopCfgFile
 }

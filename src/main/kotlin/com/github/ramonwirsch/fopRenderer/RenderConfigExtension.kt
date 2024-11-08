@@ -51,6 +51,16 @@ class RenderConfigExtension(val name: String, project: Project) {
 	 * whether all validations must have passed before trying to render
 	 */
 	var isRequiresValidation: Boolean = true
+	
+	val fopCfgFileProperty: RegularFileProperty = project.objects.fileProperty()
+	
+	/**
+	 *
+	 */
+	var fopCfgFile: File
+		get() = fopCfgFileProperty.asFile.get()
+		set(value) = fopCfgFileProperty.set(value)
+	
 
 	lateinit var transformTask: TaskProvider<XSLTTransformTask>
 

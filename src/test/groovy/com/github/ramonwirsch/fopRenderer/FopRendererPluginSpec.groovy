@@ -123,17 +123,25 @@ class FopRendererPluginSpec extends Specification {
 				'airports' {
 					stylesheet = file("xsl/style1.xsl")
 					rootSrc = file("xml/HAM.xml")
+					fopCfgFile = file("fopcfg.xml")
 				}
 			}
 		}
 		"""
+		fsFixture.file('fopcfg.xml') << """
+			<fop version="1.0">
+			</fop>
+		"""
+
+		
+		
 		and: "output file does not yet exists"
 		assert !Files.exists(fsFixture.resolve('build/doc/airports.pdf'))
 		
 		when:
 		def result = GradleRunner.create()
 		.withProjectDir(fsFixture.getCurrentPath().toFile())
-		.withArguments('renderAirports')
+		.withArguments('renderAirports', '--info')
 		.withPluginClasspath()
 		.build()
 		
