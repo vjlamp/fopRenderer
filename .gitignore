@@ -20,3 +20,7 @@ gradle-app.setting
 
 # macOS
 .DS_Store
+
+# Visual Studio Code
+.vscode/
+bin/
